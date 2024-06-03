@@ -33,4 +33,19 @@ class ApplicationTest {
         assertEquals("json", response.contentType()?.contentSubtype)
         assertContains(response.bodyAsText(), pokemonName)
     }
+
+    // TODO(delete-me): this is just an example for actual error tests later
+    @Test
+    fun testSimpleError() = testApplication {
+        application {
+            module()
+        }
+
+        val pokemonName = "mewtwo"
+
+        val response = client.get("/pokemon/$pokemonName")
+        assertEquals(HttpStatusCode.OK, response.status)
+        assertEquals("json", response.contentType()?.contentSubtype)
+        assertContains(response.bodyAsText(), pokemonName)
+    }
 }
