@@ -4,16 +4,14 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import kotlin.test.assertContains
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.test.assertContains
 
 class ApplicationTest {
     @Test
     fun testRoot(): Unit = testApplication {
-        application {
-            module()
-        }
+        application { module() }
 
         val response = client.get("/")
         assertEquals(HttpStatusCode.OK, response.status)
@@ -22,9 +20,7 @@ class ApplicationTest {
 
     @Test
     fun testFirstEndpoint() = testApplication {
-        application {
-            module()
-        }
+        application { module() }
 
         val pokemonName = "mewtwo"
 
@@ -37,9 +33,7 @@ class ApplicationTest {
     // TODO(delete-me): this is just an example for actual error tests later
     @Test
     fun testSimpleError() = testApplication {
-        application {
-            module()
-        }
+        application { module() }
 
         val pokemonName = "mewtwo"
 

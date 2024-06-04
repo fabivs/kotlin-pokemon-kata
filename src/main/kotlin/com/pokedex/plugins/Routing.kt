@@ -11,20 +11,18 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
+        get("/") { call.respondText("Hello World!") }
 
         get("/pokemon/{name}") {
             // TODO: this BadRequest could be thrown as an exception by the usecase
-            val pokemonName = call.parameters["name"] ?: return@get call.respondText("Bad Request", status = BadRequest)
+            val pokemonName =
+                call.parameters["name"]
+                    ?: return@get call.respondText("Bad Request", status = BadRequest)
             call.respondText(status = HttpStatusCode.OK, contentType = Json) { pokemonName }
         }
 
         // TODO(delete-me): example of an error
-        get("/error-test") {
-            throw BadRequestException("Too Busy")
-        }
+        get("/error-test") { throw BadRequestException("Too Busy") }
     }
 
     install(StatusPages) {
@@ -35,6 +33,4 @@ fun Application.configureRouting() {
     }
 }
 
-private data class ErrorReason(
-    var reason: String
-)
+private data class ErrorReason(var reason: String)
