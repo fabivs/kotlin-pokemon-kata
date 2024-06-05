@@ -57,6 +57,7 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
     private fun pokemonInfoFrom(response: PokemonSpeciesResponse): PokemonInfo =
         PokemonInfo(
             name = response.name,
+            // TODO: remove extra characters from description
             description = response.flavorTexts.getFirstEnglishDescription(),
             habitat = response.habitat.name,
             isLegendary = response.isLegendary

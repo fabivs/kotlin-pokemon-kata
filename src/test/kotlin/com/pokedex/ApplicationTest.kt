@@ -15,7 +15,7 @@ class ApplicationTest {
 
         val response = client.get("/")
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("Hello World!", response.bodyAsText())
+        assertEquals("Please call one of the available APIs.", response.bodyAsText())
     }
 
     @Test
