@@ -23,16 +23,19 @@ repositories {
 }
 
 dependencies {
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
-    implementation("io.ktor:ktor-client-logging:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.mockk:mockk:1.13.11")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
 }
 

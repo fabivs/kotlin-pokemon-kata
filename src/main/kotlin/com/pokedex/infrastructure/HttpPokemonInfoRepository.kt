@@ -1,13 +1,17 @@
 package com.pokedex.infrastructure
 
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.pokedex.domain.pokemon.PokemonInfo
 import com.pokedex.domain.pokemon.PokemonInfoRepository
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.jackson.*
 import kotlinx.coroutines.runBlocking
 
 class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository {
@@ -21,9 +25,7 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
             level = LogLevel.INFO
         }
 
-        //        install(ContentNegotiation) {
-        //            jackson()
-        //        }
+        install(ContentNegotiation) { jackson { configure(FAIL_ON_UNKNOWN_PROPERTIES, false) } }
 
         install(DefaultRequest)
         defaultRequest { url(pokeApiBaseUrl) }
@@ -34,14 +36,31 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
         val response = httpClient.get("/api/v2/pokemon-species/$pokemonName/")
         if (response.status == HttpStatusCode.NotFound) return@runBlocking null
 
-        return@runBlocking pokemonInfoFrom(response.bodyAsText())
+        return@runBlocking pokemonInfoFrom(response.body<PokemonSpeciesResponse>())
     }
 
-    private fun pokemonInfoFrom(pokemonInfoRaw: String): PokemonInfo =
+    private data class PokemonSpeciesResponse(
+        @JsonProperty("name") val name: String,
+        @JsonProperty("flavor_text_entries") val flavorTexts: List<FlavorTextEntry>,
+        @JsonProperty("habitat") val habitat: Habitat,
+        @JsonProperty("is_legendary") val isLegendary: Boolean
+    )
+
+    private data class FlavorTextEntry(
+        @JsonProperty("flavor_text") val flavorText: String,
+        @JsonProperty("language") val language: Map<String, String>
+    )
+
+    private data class Habitat(
+        @JsonProperty("name") val name: String,
+    )
+
+    private fun pokemonInfoFrom(response: PokemonSpeciesResponse): PokemonInfo =
         PokemonInfo(
-            name = "wip",
-            description = pokemonInfoRaw,
-            habitat = "wip",
-            isLegendary = false
+            name = response.name,
+            // TODO: get the first description with english as language!
+            description = response.flavorTexts.first().flavorText,
+            habitat = response.habitat.name,
+            isLegendary = response.isLegendary
         )
 }
