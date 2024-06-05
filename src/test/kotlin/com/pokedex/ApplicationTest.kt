@@ -39,4 +39,28 @@ class ApplicationTest {
         assertEquals(HttpStatusCode.NotFound, response.status)
         assertContains(response.bodyAsText(), "Could not find a Pokemon.")
     }
+
+    @Test
+    fun `pokemon translated endpoint returns the translated pokemon information`() =
+        testApplication {
+            application { module() }
+
+            val pokemonName = "mewtwo"
+
+            val response = client.get("/pokemon/translated/$pokemonName")
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("json", response.contentType()?.contentSubtype)
+            assertContains(response.bodyAsText(), pokemonName)
+        }
+
+    @Test
+    fun `pokemon translatedendpoint returns not found if the pokemon does not exist`() =
+        testApplication {
+            application { module() }
+
+            val pokemonName = "aquaphant"
+            val response = client.get("/pokemon/$pokemonName")
+            assertEquals(HttpStatusCode.NotFound, response.status)
+            assertContains(response.bodyAsText(), "Could not find a Pokemon.")
+        }
 }

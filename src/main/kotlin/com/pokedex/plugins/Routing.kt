@@ -24,6 +24,16 @@ fun Application.configureRouting(dependencyContainer: DependencyContainer) {
             val pokemonInfo = obtainPokemonInfo.execute(pokemonName)
             call.respond(HttpStatusCode.OK, pokemonInfo.serialize())
         }
+
+        get("/pokemon/translated/{name}") {
+            val pokemonName =
+                call.parameters["name"]
+                    ?: return@get call.respondText("Bad Request", status = BadRequest)
+
+            val obtainPokemonTranslatedInfo = dependencyContainer.getObtainPokemonInfoUseCase()
+            val pokemonInfo = obtainPokemonTranslatedInfo.execute(pokemonName)
+            call.respond(HttpStatusCode.OK, pokemonInfo.serialize())
+        }
     }
 
     install(StatusPages) {
