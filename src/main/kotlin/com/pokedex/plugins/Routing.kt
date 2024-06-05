@@ -14,7 +14,7 @@ fun Application.configureRouting() {
         get("/") { call.respondText("Hello World!") }
 
         get("/pokemon/{name}") {
-            // TODO: this BadRequest could be thrown as an exception by the usecase
+            // TODO: this BadRequest could be thrown as an exception by the usecase ?
             val pokemonName =
                 call.parameters["name"]
                     ?: return@get call.respondText("Bad Request", status = BadRequest)
