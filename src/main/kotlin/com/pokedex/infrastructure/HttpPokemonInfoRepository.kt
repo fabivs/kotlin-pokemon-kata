@@ -31,7 +31,6 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
         defaultRequest { url(pokeApiBaseUrl) }
     }
 
-    // Note: opted for runBlocking instead of suspend, to avoid having suspend in the domain usecase
     override fun getBy(pokemonName: String): PokemonInfo? = runBlocking {
         val response = httpClient.get("/api/v2/pokemon-species/$pokemonName/")
         if (response.status == HttpStatusCode.NotFound) return@runBlocking null
@@ -47,7 +46,7 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
     )
 
     private data class FlavorTextEntry(
-        @JsonProperty("flavor_text") val flavorText: String,
+        @JsonProperty("flavor_text") val description: String,
         @JsonProperty("language") val language: Map<String, String>
     )
 
@@ -58,9 +57,13 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
     private fun pokemonInfoFrom(response: PokemonSpeciesResponse): PokemonInfo =
         PokemonInfo(
             name = response.name,
-            // TODO: get the first description with english as language!
-            description = response.flavorTexts.first().flavorText,
+            description = response.flavorTexts.getFirstEnglishDescription(),
             habitat = response.habitat.name,
             isLegendary = response.isLegendary
         )
+
+    private fun List<FlavorTextEntry>.getFirstEnglishDescription(): String {
+        // TODO: handle null properly
+        return find { it.language["name"] == "en" }?.description!!
+    }
 }
