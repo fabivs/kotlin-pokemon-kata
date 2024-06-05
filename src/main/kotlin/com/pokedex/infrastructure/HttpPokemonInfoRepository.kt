@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 
 class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository {
     private val httpClient: HttpClient = HttpClient {
-        expectSuccess = true
+        expectSuccess = false
         followRedirects = false
 
         installRetryConfiguration()

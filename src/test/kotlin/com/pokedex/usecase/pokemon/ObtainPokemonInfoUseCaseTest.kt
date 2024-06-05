@@ -33,7 +33,7 @@ class ObtainPokemonInfoUseCaseTest {
 
     @Test
     fun `throw an exception when pokemon can't be found`() {
-        val pokemonName = "Aquaphant"
+        val pokemonName = "aquaphant"
         every { pokemonInfoRepository.getBy(pokemonName) } returns null
 
         assertFailsWith<RuntimeException> { obtainPokemonInfo.execute(pokemonName) }

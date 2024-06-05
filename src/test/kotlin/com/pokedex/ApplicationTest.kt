@@ -19,7 +19,7 @@ class ApplicationTest {
     }
 
     @Test
-    fun testFirstEndpoint() = testApplication {
+    fun `pokemon endpoint returns the pokemon information`() = testApplication {
         application { module() }
 
         val pokemonName = "mewtwo"
@@ -30,16 +30,13 @@ class ApplicationTest {
         assertContains(response.bodyAsText(), pokemonName)
     }
 
-    // TODO(delete-me): this is just an example for actual error tests later
     @Test
-    fun testSimpleError() = testApplication {
+    fun `pokemon endpoint returns not found if the pokemon does not exist`() = testApplication {
         application { module() }
 
-        val pokemonName = "mewtwo"
-
+        val pokemonName = "aquaphant"
         val response = client.get("/pokemon/$pokemonName")
-        assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("json", response.contentType()?.contentSubtype)
-        assertContains(response.bodyAsText(), pokemonName)
+        assertEquals(HttpStatusCode.NotFound, response.status)
+        assertContains(response.bodyAsText(), "Could not find a Pokemon.")
     }
 }
