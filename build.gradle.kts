@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "2.0.0"
     id("io.ktor.plugin") version "2.3.11"
     id("com.ncorti.ktfmt.gradle") version "0.18.0"
+    id("com.adarshr.test-logger") version "4.0.0"
 }
 
 group = "com.pokedex"

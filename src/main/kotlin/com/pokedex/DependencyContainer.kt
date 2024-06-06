@@ -1,6 +1,6 @@
 package com.pokedex
 
-import com.pokedex.infrastructure.HttpPokemonInfoRepository
+import com.pokedex.infrastructure.pokemon.HttpPokemonInfoRepository
 import com.pokedex.usecase.pokemon.ObtainPokemonInfoUseCase
 import com.pokedex.usecase.pokemon.ObtainTranslatedPokemonInfoUseCase
 

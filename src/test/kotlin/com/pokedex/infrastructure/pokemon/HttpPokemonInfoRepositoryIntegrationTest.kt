@@ -1,4 +1,4 @@
-package com.pokedex.infrastructure
+package com.pokedex.infrastructure.pokemon
 
 import kotlin.test.assertContains
 import kotlin.test.assertEquals

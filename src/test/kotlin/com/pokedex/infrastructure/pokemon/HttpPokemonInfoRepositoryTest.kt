@@ -1,6 +1,6 @@
-package com.pokedex.infrastructure
+package com.pokedex.infrastructure.pokemon
 
-import com.pokedex.infrastructure.HttpPokemonInfoRepository.*
+import com.pokedex.infrastructure.pokemon.HttpPokemonInfoRepository.*
 import io.mockk.coEvery
 import io.mockk.spyk
 import kotlin.test.assertEquals

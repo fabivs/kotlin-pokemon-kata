@@ -1,9 +1,10 @@
-package com.pokedex.infrastructure
+package com.pokedex.infrastructure.pokemon
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.pokedex.domain.pokemon.PokemonInfo
 import com.pokedex.domain.pokemon.PokemonInfoRepository
+import com.pokedex.infrastructure.installRetryConfiguration
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
