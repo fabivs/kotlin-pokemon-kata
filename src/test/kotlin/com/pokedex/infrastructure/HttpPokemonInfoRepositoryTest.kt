@@ -1,25 +1,41 @@
 package com.pokedex.infrastructure
 
-import kotlin.test.assertContains
+import com.pokedex.infrastructure.HttpPokemonInfoRepository.*
+import io.mockk.coEvery
+import io.mockk.spyk
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-// TODO: aggiungere tag integration se necessario
-// questo è un real test che chiama l'API per davvero, ci va bene?
 class HttpPokemonInfoRepositoryTest {
 
-    private val repository = HttpPokemonInfoRepository(pokeApiBaseUrl = "https://pokeapi.co")
+    private val mockedRepository = spyk(HttpPokemonInfoRepository(pokeApiBaseUrl = ""))
 
     @Test
-    fun `get pokemon information by name`() = runTest {
-        val pokemonInfo = repository.getBy("pikachu")
+    fun `pokemon description does not have special characters`() = runTest {
+        val response =
+            PokemonSpeciesResponse(
+                name = "Mocked Squirtle",
+                flavorTexts =
+                listOf(
+                    FlavorTextEntry(
+                        description =
+                        "After birth, its\nback swells and\nhardens into a\u000cshell. Powerfully\nsprays foam from\nits mouth.",
+                        language = mapOf("name" to "en")
+                    )
+                ),
+                habitat = Habitat(name = "forest"),
+                isLegendary = false
+            )
+
+        coEvery { mockedRepository.obtainPokemonSpecies("Mocked Squirtle") } returns response
+
+        val pokemonInfo = mockedRepository.getBy("Mocked Squirtle")
         assertNotNull(pokemonInfo)
-        assertEquals("pikachu", pokemonInfo.name)
-        assertContains(pokemonInfo.description, "electricity")
-        assertEquals("forest", pokemonInfo.habitat)
-        assertFalse { pokemonInfo.isLegendary }
+        assertEquals(
+            "After birth, its back swells and hardens into a shell. Powerfully sprays foam from its mouth.",
+            pokemonInfo.description
+        )
     }
 }

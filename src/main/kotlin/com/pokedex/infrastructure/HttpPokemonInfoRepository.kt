@@ -32,39 +32,50 @@ class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository 
     }
 
     override fun getBy(pokemonName: String): PokemonInfo? = runBlocking {
-        val response = httpClient.get("/api/v2/pokemon-species/$pokemonName/")
-        if (response.status == HttpStatusCode.NotFound) return@runBlocking null
-
-        return@runBlocking pokemonInfoFrom(response.body<PokemonSpeciesResponse>())
+        return@runBlocking obtainPokemonSpecies(pokemonName)?.let { adaptPokemonInfoFrom(it) }
     }
 
-    private data class PokemonSpeciesResponse(
+    internal suspend fun obtainPokemonSpecies(pokemonName: String): PokemonSpeciesResponse? {
+        val response = httpClient.get("/api/v2/pokemon-species/$pokemonName/")
+        if (response.status == HttpStatusCode.NotFound) return null
+        return response.body<PokemonSpeciesResponse>()
+    }
+
+    internal data class PokemonSpeciesResponse(
         @JsonProperty("name") val name: String,
         @JsonProperty("flavor_text_entries") val flavorTexts: List<FlavorTextEntry>,
         @JsonProperty("habitat") val habitat: Habitat,
         @JsonProperty("is_legendary") val isLegendary: Boolean
     )
 
-    private data class FlavorTextEntry(
+    internal data class FlavorTextEntry(
         @JsonProperty("flavor_text") val description: String,
         @JsonProperty("language") val language: Map<String, String>
     )
 
-    private data class Habitat(
+    internal data class Habitat(
         @JsonProperty("name") val name: String,
     )
 
-    private fun pokemonInfoFrom(response: PokemonSpeciesResponse): PokemonInfo =
+    private fun adaptPokemonInfoFrom(response: PokemonSpeciesResponse): PokemonInfo =
         PokemonInfo(
             name = response.name,
-            // TODO: remove extra characters from description
-            description = response.flavorTexts.getFirstEnglishDescription(),
+            description = response.flavorTexts.getFirstEnglishDescription().cleanUpDescription(),
             habitat = response.habitat.name,
             isLegendary = response.isLegendary
         )
 
     private fun List<FlavorTextEntry>.getFirstEnglishDescription(): String {
-        // TODO: handle null properly
-        return find { it.language["name"] == "en" }?.description!!
+        return find { it.language["name"] == "en" }?.description ?: ""
+    }
+
+    // see: https://github.com/veekun/pokedex/issues/218#issuecomment-339841781
+    private fun String.cleanUpDescription(): String {
+        return this.replace(Regex("\\f"), " ")
+            .replace(Regex("\\u00ad\\n"), "")
+            .replace(Regex("\\u00ad"), "")
+            .replace(Regex(" -\\n"), " - ")
+            .replace(Regex("-\\n"), "-")
+            .replace(Regex("\\n"), " ")
     }
 }
