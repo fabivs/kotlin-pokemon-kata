@@ -7,7 +7,6 @@ import kotlin.test.assertNotNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-// TODO: aggiungere tag integration se necessario
 class HttpPokemonInfoRepositoryIntegrationTest {
 
     private val repository = HttpPokemonInfoRepository(pokeApiBaseUrl = "https://pokeapi.co")

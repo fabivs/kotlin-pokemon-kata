@@ -4,6 +4,7 @@ import com.pokedex.domain.pokemon.PokemonInfo
 import com.pokedex.domain.pokemon.PokemonInfoRepository
 
 class ObtainTranslatedPokemonInfoUseCase(private val pokemonInfoRepository: PokemonInfoRepository) {
+    // TODO: implement logic for when to request translations from TranslationService!
     fun execute(pokemonName: String): PokemonInfo {
         val pokemonInfo =
             pokemonInfoRepository.getBy(pokemonName) ?: throw PokemonNotFoundException(pokemonName)
