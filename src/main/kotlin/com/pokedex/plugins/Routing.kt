@@ -28,7 +28,8 @@ fun Application.configureRouting(dependencyContainer: DependencyContainer) {
                 call.parameters["name"]
                     ?: return@get call.respondText("Bad Request", status = BadRequest)
 
-            val obtainPokemonTranslatedInfo = dependencyContainer.getObtainPokemonInfoUseCase()
+            val obtainPokemonTranslatedInfo =
+                dependencyContainer.getObtainTranslatedPokemonInfoUseCase()
             val pokemonInfo = obtainPokemonTranslatedInfo.execute(pokemonName)
             call.respond(HttpStatusCode.OK, pokemonInfo.serialize())
         }
