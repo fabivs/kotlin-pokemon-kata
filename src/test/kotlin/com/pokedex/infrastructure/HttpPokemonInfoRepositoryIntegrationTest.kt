@@ -1,11 +1,11 @@
 package com.pokedex.infrastructure
 
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 // TODO: aggiungere tag integration se necessario
 class HttpPokemonInfoRepositoryIntegrationTest {
