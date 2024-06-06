@@ -13,8 +13,6 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting(dependencyContainer: DependencyContainer) {
     routing {
-        get("/") { call.respondText("Please call one of the available APIs.") }
-
         get("/pokemon/{name}") {
             val pokemonName =
                 call.parameters["name"]
