@@ -84,7 +84,7 @@ possible.
 
 - REST endpoints are defined in the `Routing.kt` file.
 - Use cases are defined in the `usecase` package and contain the core business logic of the application.
-- Clients to access external services are defined via an interface in `domain` and then implemented in
+- Clients to access external services are defined via interfaces in `domain` and then implemented in
   the classes inside the `infrastructure` package.
 - Dependency injection is performed via the `DependencyContainer` file.
 
@@ -104,7 +104,8 @@ Tests:
 
 Requirements:
 - JDK and Gradle
-- Make (not strictly required, you can run the gradle commands inside the Makefile manually)
+- Docker (if opting for running the application with Docker)
+- Make (not strictly required, you can run the gradle and docker commands inside the Makefile manually)
 
 Note: use `$ make help` to see all available make commands.
 
@@ -128,11 +129,11 @@ Run the tests:
 $ make test
 ```
 
-NOTE: the translation APIs are rate limited to 10 calls per hour, and the entire suite of tests hits the real
-endpoints 6 times.
+*NOTE: the translation APIs are rate limited to 10 calls per hour, and the entire suite of tests hits the real 
+endpoints 6 times.*
 
 ## Within a Docker container
-A Dockerfile has been provided to build a docker image for the project.
+A `Dockerfile` has been provided to build a docker image for the project.
 
 Build the docker image for the project:
 ```
