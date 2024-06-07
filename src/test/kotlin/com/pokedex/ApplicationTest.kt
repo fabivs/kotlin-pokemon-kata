@@ -6,9 +6,10 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.junit.Assert.assertEquals
-import org.junit.Test
 import kotlin.test.assertContains
+import org.junit.Assert.assertEquals
+import org.junit.Ignore
+import org.junit.Test
 
 class ApplicationTest {
     @Test
@@ -55,6 +56,7 @@ class ApplicationTest {
         }
 
     @Test
+    @Ignore
     fun `pokemon translated endpoint returns pokemon information with Yoda translation for a habitat cave pokemon`() =
         testApplication {
             application { module() }
@@ -72,6 +74,7 @@ class ApplicationTest {
         }
 
     @Test
+    @Ignore
     fun `pokemon translated endpoint returns the translated pokemon information with Shakespeare translation`() =
         testApplication {
             application { module() }

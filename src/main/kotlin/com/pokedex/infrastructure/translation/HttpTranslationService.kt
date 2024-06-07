@@ -40,9 +40,13 @@ class HttpTranslationService(translationBaseUrl: String) : TranslationService {
 
     private suspend fun getTranslationFor(text: String, character: String): String {
         val response =
-            httpClient
-                .get("translate/$character") { url { parameters.append("text", text) } }
-                .body<TranslationResponse>()
+            try {
+                httpClient
+                    .get("translate/$character") { url { parameters.append("text", text) } }
+                    .body<TranslationResponse>()
+            } catch (e: ClientRequestException) {
+                throw UnableToObtainTranslationException(text, character)
+            }
 
         return response.contents.translated
     }
@@ -52,4 +56,7 @@ class HttpTranslationService(translationBaseUrl: String) : TranslationService {
     )
 
     private data class TranslationContents(@JsonProperty("translated") val translated: String)
+
+    class UnableToObtainTranslationException(text: String, character: String) :
+        RuntimeException("Unable to obtain '$character' translation for text: '$text'")
 }

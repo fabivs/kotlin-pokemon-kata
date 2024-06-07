@@ -3,7 +3,7 @@ package com.pokedex.usecase.pokemon
 import com.pokedex.domain.pokemon.PokemonInfo
 import com.pokedex.domain.pokemon.PokemonInfoRepository
 import com.pokedex.domain.translation.TranslationService
-import io.ktor.client.plugins.*
+import com.pokedex.infrastructure.translation.HttpTranslationService.UnableToObtainTranslationException
 
 class ObtainTranslatedPokemonInfoUseCase(
     private val pokemonInfoRepository: PokemonInfoRepository,
@@ -13,15 +13,16 @@ class ObtainTranslatedPokemonInfoUseCase(
         val pokemonInfo =
             pokemonInfoRepository.getBy(pokemonName) ?: throw PokemonNotFoundException(pokemonName)
 
-        val updatedDescription = try {
-            if (pokemonInfo.isLegendary || pokemonInfo.habitat == "cave") {
-                translationService.getYodaTranslation(pokemonInfo.description)
-            } else {
-                translationService.getShakespeareTranslation(pokemonInfo.description)
+        val updatedDescription =
+            try {
+                if (pokemonInfo.isLegendary || pokemonInfo.habitat == "cave") {
+                    translationService.getYodaTranslation(pokemonInfo.description)
+                } else {
+                    translationService.getShakespeareTranslation(pokemonInfo.description)
+                }
+            } catch (e: UnableToObtainTranslationException) {
+                pokemonInfo.description
             }
-        } catch (e: ClientRequestException) {
-            throw UnableToObtainTranslationException()
-        }
 
         return pokemonInfo.copy(description = updatedDescription)
     }
@@ -29,5 +30,3 @@ class ObtainTranslatedPokemonInfoUseCase(
 
 data class PokemonNotFoundException(val pokemonName: String) :
     RuntimeException("Pokemon not found with name $pokemonName.")
-
-class UnableToObtainTranslationException : RuntimeException("Unable to obtain translation.")

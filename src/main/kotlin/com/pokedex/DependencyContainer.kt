@@ -5,7 +5,7 @@ import com.pokedex.infrastructure.translation.HttpTranslationService
 import com.pokedex.usecase.pokemon.ObtainPokemonInfoUseCase
 import com.pokedex.usecase.pokemon.ObtainTranslatedPokemonInfoUseCase
 
-// In an actual production environment, this would be an environment variable
+// In an actual production environment, these would be environment variables
 private const val POKE_BASE_API = "https://pokeapi.co"
 private const val FUN_TRANSLATIONS_BASE_API = "https://api.funtranslations.com"
 

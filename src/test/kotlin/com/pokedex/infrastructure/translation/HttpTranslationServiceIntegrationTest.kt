@@ -2,6 +2,7 @@ package com.pokedex.infrastructure.translation
 
 import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 
 class HttpTranslationServiceIntegrationTest {
@@ -9,6 +10,7 @@ class HttpTranslationServiceIntegrationTest {
         HttpTranslationService(translationBaseUrl = "https://api.funtranslations.com")
 
     @Test
+    @Ignore
     fun `get yoda translation for a string`() = runTest {
         val originalString =
             "It was created by a scientist after years of horrific gene splicing and DNA engineering experiments."
@@ -18,6 +20,7 @@ class HttpTranslationServiceIntegrationTest {
     }
 
     @Test
+    @Ignore
     fun `get shakespeare translation for a string`() = runTest {
         val originalString =
             "When several of these POKéMON gather, their electricity could build and cause lightning storms."
