@@ -1,36 +1,16 @@
 package com.pokedex.infrastructure.pokemon
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.pokedex.domain.pokemon.PokemonInfo
 import com.pokedex.domain.pokemon.PokemonInfoRepository
-import com.pokedex.infrastructure.installRetryConfiguration
-import io.ktor.client.*
+import com.pokedex.infrastructure.ktorHttpClient
 import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.serialization.jackson.*
 import kotlinx.coroutines.runBlocking
 
 class HttpPokemonInfoRepository(pokeApiBaseUrl: String) : PokemonInfoRepository {
-    private val httpClient: HttpClient = HttpClient {
-        expectSuccess = false
-        followRedirects = false
-
-        installRetryConfiguration()
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.INFO
-        }
-
-        install(ContentNegotiation) { jackson { configure(FAIL_ON_UNKNOWN_PROPERTIES, false) } }
-
-        install(DefaultRequest)
-        defaultRequest { url(pokeApiBaseUrl) }
-    }
+    private val httpClient = ktorHttpClient(pokeApiBaseUrl, shouldExpectSuccess = false)
 
     override fun getBy(pokemonName: String): PokemonInfo? = runBlocking {
         return@runBlocking obtainPokemonSpecies(pokemonName)?.let { adaptPokemonInfoFrom(it) }
