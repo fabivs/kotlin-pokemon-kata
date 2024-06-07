@@ -6,10 +6,9 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import kotlin.test.assertContains
 import org.junit.Assert.assertEquals
-import org.junit.Ignore
 import org.junit.Test
+import kotlin.test.assertContains
 
 class ApplicationTest {
     @Test
@@ -34,7 +33,6 @@ class ApplicationTest {
         assertContains(response.bodyAsText(), "Could not find a Pokemon.")
     }
 
-    @Ignore
     @Test
     fun `pokemon translated endpoint returns pokemon information with Yoda translation for a legendary pokemon`() =
         testApplication {
@@ -56,7 +54,6 @@ class ApplicationTest {
             )
         }
 
-    @Ignore
     @Test
     fun `pokemon translated endpoint returns pokemon information with Yoda translation for a habitat cave pokemon`() =
         testApplication {
@@ -69,12 +66,11 @@ class ApplicationTest {
             val responseMap = mapper.readValue<Map<String, String>>(responseBody)
 
             assertEquals(
-                "I'll get this another time due to rate limiting.",
+                "Forms colonies in perpetually dark places.Ultrasonic waves to identify and approach targets,  uses.",
                 responseMap["description"]
             )
         }
 
-    @Ignore
     @Test
     fun `pokemon translated endpoint returns the translated pokemon information with Shakespeare translation`() =
         testApplication {

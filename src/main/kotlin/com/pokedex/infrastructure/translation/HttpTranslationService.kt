@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 
 class HttpTranslationService(translationBaseUrl: String) : TranslationService {
     private val httpClient: HttpClient = HttpClient {
-        expectSuccess = false
+        expectSuccess = true
         followRedirects = false
 
         installRetryConfiguration()
