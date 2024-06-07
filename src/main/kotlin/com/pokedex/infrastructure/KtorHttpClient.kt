@@ -28,12 +28,12 @@ internal fun ktorHttpClient(baseUrl: String, shouldExpectSuccess: Boolean): Http
 
 private fun HttpClientConfig<*>.installRetryConfiguration() {
     install(HttpRequestRetry) {
-        maxRetries = 3
+        maxRetries = 2
         retryIf { _, response ->
             response.status == HttpStatusCode.TooManyRequests ||
                 response.status == HttpStatusCode.ServiceUnavailable
         }
         retryOnExceptionIf { _, cause -> cause is IOException }
-        delayMillis { retry -> retry * 1_500L }
+        delayMillis { retry -> retry * 500L }
     }
 }
