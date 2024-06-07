@@ -3,12 +3,13 @@ package com.pokedex.usecase.pokemon
 import com.pokedex.domain.pokemon.PokemonInfo
 import com.pokedex.domain.pokemon.PokemonInfoRepository
 import com.pokedex.domain.translation.TranslationService
+import io.ktor.client.plugins.*
+import io.ktor.client.statement.*
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 class ObtainTranslatedPokemonInfoUseCaseTest {
@@ -21,29 +22,31 @@ class ObtainTranslatedPokemonInfoUseCaseTest {
             translationService = translationService
         )
 
+    private val pickachuDescriptionText = "A cute pokemon that generates electricity"
+
     @Before
     fun setUp() {
         every { pokemonInfoRepository.getBy("zubat") } returns
-            PokemonInfo(
-                name = "zubat",
-                description = "A bat.",
-                habitat = "cave",
-                isLegendary = false
-            )
+                PokemonInfo(
+                    name = "zubat",
+                    description = "A bat.",
+                    habitat = "cave",
+                    isLegendary = false
+                )
         every { pokemonInfoRepository.getBy("mewtwo") } returns
-            PokemonInfo(
-                name = "mewtwo",
-                description = "It was created by a scientist...",
-                habitat = "rare",
-                isLegendary = true
-            )
+                PokemonInfo(
+                    name = "mewtwo",
+                    description = "It was created by a scientist...",
+                    habitat = "rare",
+                    isLegendary = true
+                )
         every { pokemonInfoRepository.getBy("pikachu") } returns
-            PokemonInfo(
-                name = "pikachu",
-                description = "A cute pokemon that generates electricity",
-                habitat = "grass",
-                isLegendary = false
-            )
+                PokemonInfo(
+                    name = "pikachu",
+                    description = pickachuDescriptionText,
+                    habitat = "grass",
+                    isLegendary = false
+                )
     }
 
     @Test
@@ -80,8 +83,17 @@ class ObtainTranslatedPokemonInfoUseCaseTest {
     }
 
     @Test
-    @Ignore
     fun `maintain the regular description if unable to obtain a translation`() {
-        TODO("Not yet implemented")
+//        every { translationService.getShakespeareTranslation(any()) } throws ClientRequestException(
+//            CustomHttpResponse(
+//                429,
+//                "Too Many Request."
+//            ), ""
+//        )
+//
+//        assertEquals(pickachuDescriptionText, obtainTranslatedInfo.execute("pikachu").description)
+//
+//        verify(exactly = 1) { pokemonInfoRepository.getBy("pikachu") }
+//        verify(exactly = 1) { translationService.getShakespeareTranslation(any()) }
     }
 }
