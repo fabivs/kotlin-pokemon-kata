@@ -9,6 +9,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class HttpPokemonInfoRepositoryTest {
+    // Note: this test does not actually call any external service, it's technically a Unit test.
+    // The purpose of these tests is testing internal logic of the repository.
 
     private val mockedRepository = spyk(HttpPokemonInfoRepository(pokeApiBaseUrl = ""))
 
